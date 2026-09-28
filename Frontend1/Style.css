@@ -1,0 +1,66 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f4f4f4;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 500px;
+    min-height: 350px;
+    padding: 25px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+header {
+    font-size: 35px;
+    font-weight: bold;
+    color: #6c5ce7;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.container h3 {
+    text-align: center;
+    color: #555;
+}
+#taskList {
+    list-style: none;
+    padding: 0;
+    margin-top: 25px;
+}
+
+#taskList li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #f8f8ff;
+    border-radius: 8px;
+    font-size: 17px;
+}
+
+#taskList li input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+#taskList li button {
+    margin-left: auto;
+    padding: 7px 12px;
+    border: none;
+    border-radius: 6px;
+    background: #e74c3c;
+    color: white;
+    cursor: pointer;
+}
+
+#taskList li button:hover {
+    background: #c0392b;
+}
