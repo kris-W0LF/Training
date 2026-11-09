@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Task Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="container">
+        <header>
+            <p class="tagline">STAY ORGANIZED</p>
+            <h1>Student Task Manager</h1>
+            <p class="subtitle">
+                Keep track of what you need to get done.
+            </p>
+        </header>
+        <form id="taskForm">
+            <input
+                type="text"
+                id="taskInput"
+                placeholder="Add a new task..."
+                autocomplete="off"
+            >
+            <button type="submit">Add Task</button>
+        </form>
+        <section class="tasks-section">
+            <div class="section-heading">
+                <h2>Your Tasks</h2>
+                <span id="taskCount">0 tasks</span>
+            </div>
+            <ul id="taskList"></ul>
+            <p id="emptyMessage">
+                No tasks yet. Add one to get started!
+            </p>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
