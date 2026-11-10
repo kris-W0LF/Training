@@ -1,0 +1,60 @@
+<!-- input -->
+<!-- <app-child
+    [name]="'Krish'"
+    [age]="20">
+</app-child> -->
+
+<!-- output -->
+
+<!-- <app-child
+    (sendData)="receiveData($event)">
+</app-child>
+
+<h2>{{ message }}</h2> -->
+
+<!-- databinding
+
+<h1>Hello {{ name }}</h1> -->
+
+//pipes
+
+<div class="container">
+
+    <h1>Angular Pipes Demo</h1>
+  
+    <h2>1. Uppercase Pipe</h2>
+    <p>{{ name | uppercase }}</p>
+  
+    <h2>2. Lowercase Pipe</h2>
+    <p>{{ message | lowercase }}</p>
+  
+    <h2>3. Titlecase Pipe</h2>
+    <p>{{ message | titlecase }}</p>
+  
+    <h2>4. Date Pipe</h2>
+    <p>{{ today | date:'dd/MM/yyyy' }}</p>
+  
+    <h2>5. Currency Pipe</h2>
+    <p>{{ price | currency:'INR' }}</p>
+  
+    <h2>6. Percent Pipe</h2>
+    <p>{{ marks | percent }}</p>
+  
+    <h2>7. Number Pipe</h2>
+    <p>{{ 12.34567 | number:'1.2-2' }}</p>
+  
+    <h2>8. Slice Pipe</h2>
+    <p>{{ numbers | slice:0:3 }}</p>
+  
+   
+  </div>
+
+  <!-- <h1>Angular Routing Tutorial</h1>
+
+<nav>
+  <a routerLink="/routing/home">Home</a>
+  <a routerLink="/routing/about">About</a>
+  <a routerLink="/routing/contact">Contact</a>
+</nav>
+
+<router-outlet></router-outlet> -->

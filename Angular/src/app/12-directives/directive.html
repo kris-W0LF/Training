@@ -1,0 +1,28 @@
+<h1>Angular Directives</h1>
+
+<!-- ngIf -->
+<h3>ngIf</h3>
+<p *ngIf="isLoggedIn">Welcome User!</p>
+
+<!-- ngFor -->
+<h3>ngFor</h3>
+<ul>
+  <li *ngFor="let name of names">{{ name }}</li>
+</ul>
+
+<!-- ngClass -->
+<h3>ngClass</h3>
+<p [ngClass]="{'active': isActive}">
+  Hello Angular
+</p>
+
+<!-- ngStyle -->
+<h3>ngStyle</h3>
+<p [ngStyle]="{'color': 'red'}">
+  Dynamic Styling
+</p>
+
+<!-- ngModel -->
+<h3>ngModel</h3>
+<input [(ngModel)]="username" placeholder="Enter name">
+<p>Your name: {{ username }}</p>
