@@ -23,7 +23,7 @@ function calculate() {
   try {
     let expression = input;
 
-    // Step 1: Handle brackets
+   
     while (expression.includes("(")) {
       const start = expression.lastIndexOf("(");
       const end = expression.indexOf(")", start);
