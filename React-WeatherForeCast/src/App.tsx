@@ -1,75 +1,128 @@
-
 import { useState } from "react";
 import "./App.css";
 
+interface WeatherData {
+  name: string;
+  main: {
+    temp: number;
+    humidity: number;
+  };
+  weather: {
+    main: string;
+  }[];
+  wind: {
+    speed: number;
+  }
+}
 function App() {
+
   const [city, setCity] = useState("");
-  const [weather, setWeather] = useState<any>(null);
+  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const getWeather = async () => {
-    if (!city.trim()) return;
+
+  async function getData() {
+
+    if (!city) {
+      alert("Please enter city name");
+      return;
+    }
+    setLoading(true);
+    setError("");
+
+    const APIKey = "8ece761c305a100aed1260d309aa4a5e";
+    const api = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${APIKey}&units=metric`;
+    // const api = "https://api.openweathermap.org/data/2.5/weather";
 
     try {
-      setError("");
+      const data = await fetch(api);
 
-      
-      const geo = await fetch(
-        `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1`
-      );
-
-      const geoData = await geo.json();
-
-      if (!geoData.results?.length) {
+      if (!data.ok) {
         throw new Error("City not found");
       }
+      const result = await data.json();
+      setWeather(result);
 
-      const { latitude, longitude, name } = geoData.results[0];
 
-     
-      const res = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code`
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) throw new Error("Weather unavailable");
-
-      setWeather({ ...data.current, name });
-    } catch {
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("Something went wrong");
+      }
       setWeather(null);
-      setError("City not found. Try again!");
+
+    } finally {
+      setLoading(false);
     }
-  };
+  }
 
   return (
-    <div className="app">
-      <h1>Weather App</h1>
+    <div className="container">
+      <label htmlFor="city">City:</label>
+      {/* <input type="text" value={city} onChange={(e) => setCity(e.target.value)} /> */}
+      <select value={city} onChange={(e) => setCity(e.target.value)}>
 
-      <div className="search">
-        <input
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          placeholder="Enter city name"
-          onKeyDown={(e) => e.key === "Enter" && getWeather()}
-        />
-        <button onClick={getWeather}>Search</button>
-      </div>
+        <option value="">Select a city</option>
+        <option value="Bhopal">Bhopal</option>
+        <option value="Delhi">Delhi</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Pune">Pune</option>
+        <option value="Bengaluru">Bengaluru</option>
+        <option value="Ahmedabad">Ahmedabad</option>
+        <option value="Agra">Agra</option>
+        <option value="Amritsar">Amritsar</option>
+        <option value="Bhubaneswar">Bhubaneswar</option>
+        <option value="Chandigarh">Chandigarh</option>
+        <option value="Coimbatore">Coimbatore</option>
+        <option value="Dehradun">Dehradun</option>
+        <option value="Faridabad">Faridabad</option>
+        <option value="Guwahati">Guwahati</option>
+        <option value="Gwalior">Gwalior</option>
+        <option value="Jabalpur">Jabalpur</option>
+        <option value="Jodhpur">Jodhpur</option>
+        <option value="Kanpur">Kanpur</option>
+        <option value="Kochi">Kochi</option>
+        <option value="Ludhiana">Ludhiana</option>
+        <option value="Madurai">Madurai</option>
+        <option value="Mysuru">Mysuru</option>
+        <option value="Nagpur">Nagpur</option>
+        <option value="Nashik">Nashik</option>
+        <option value="Patna">Patna</option>
+        <option value="Prayagraj">Prayagraj</option>
+        <option value="Raipur">Raipur</option>
+        <option value="Rajkot">Rajkot</option>
+        <option value="Ranchi">Ranchi</option>
+        <option value="Surat">Surat</option>
+        <option value="Thane">Thane</option>
+        <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+        <option value="Udaipur">Udaipur</option>
+        <option value="Vadodara">Vadodara</option>
+        <option value="Varanasi">Varanasi</option>
+        <option value="Vijayawada">Vijayawada</option>
+        <option value="Visakhapatnam">Visakhapatnam</option>
+      </select>
 
-      {error && <p className="error">{error}</p>}
+      <button onClick={getData}>Search</button>
+      
 
-      {weather && (
-        <div className="card">
-          <h2>{weather.name}</h2>
-          <h1>{Math.round(weather.temperature_2m)}°C</h1>
+      {error && <p>{error}</p>}
 
-          <p>Humidity: {weather.relative_humidity_2m}%</p>
-          <p>Wind: {weather.wind_speed_10m} km/h</p>
-          <p>Feels Like: {weather.apparent_temperature}°C</p>
-        </div>
-      )}
+
+      {loading && <p>Loading..</p>}
+
+      {weather && <h2>{weather.name}</h2>}
+      {weather && <h1>Temperature: {weather.main.temp}°C</h1>}
+      {weather && <h3>{weather.weather[0].main}</h3>}
+      {weather && <p> Humidity: {weather.main.humidity}%</p>}
+      {weather && <p>Wind Speed: {weather.wind.speed}</p>}
+
+
     </div>
-  );
+  )
+
+
 }
 
 export default App;

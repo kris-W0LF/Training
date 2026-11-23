@@ -1,86 +1,130 @@
 
+/* Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* Page Background */
 body {
   font-family: Arial, sans-serif;
-  background: #e8f1f8;
-}
-
-.app {
-  width: 350px;
-  margin: 100px auto;
-  padding: 25px;
-  text-align: center;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px #c5d3df;
-}
-
-.app h1 {
-  color: #1976d2;
-  margin-bottom: 20px;
-}
-
-.search {
+  background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+  min-height: 100vh;
   display: flex;
-  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
-.search input {
-  width: 70%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 7px;
+#root {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Main Container */
+.container {
+  width: 100%;
+  max-width: 450px;
+  padding: 30px;
+  background: linear-gradient(145deg, #2563eb, #4338ca);
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.25);
+  text-align: center;
+}
+
+/* App */
+.app {
+  width: 100%;
+  text-align: center;
+}
+
+/* Heading */
+h1 {
+  color: white;
+  margin-bottom: 25px;
+  font-size: 28px;
+}
+
+/* Label */
+label {
+  display: block;
+  text-align: left;
+  color: white;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+/* Dropdown */
+select {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  margin-bottom: 18px;
+  background: #ffffff;
+  color: #333;
   outline: none;
 }
 
-.search button {
-  padding: 10px 15px;
-  background: #1976d2;
-  color: white;
+/* Button */
+button {
+  padding: 12px 25px;
+  background: #fbbf24;
+  color: #1e293b;
   border: none;
-  border-radius: 7px;
-  cursor: pointer;
-}
-
-.search button:hover {
-  background: #125ca3;
-}
-
-.card {
-  margin-top: 20px;
-  padding: 20px;
-  background: #f1f7fc;
   border-radius: 10px;
-  color: #333;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.card h2 {
-  margin-bottom: 10px;
-  color: #1976d2;
+button:hover {
+  background: #f59e0b;
+  transform: translateY(-2px);
 }
 
-.card h1 {
-  font-size: 45px;
+/* City Name */
+.app h2 {
+  color: white;
+  margin: 25px 0 15px;
+  font-size: 27px;
+}
+
+/* Temperature */
+.app h1:not(:first-child) {
+  color: #fef08a;
+  font-size: 38px;
+  margin: 18px 0;
+}
+
+/* Weather Condition */
+.app h3 {
+  color: #bfdbfe;
   margin: 15px 0;
+  font-size: 21px;
 }
 
-.card p {
-  margin: 10px 0;
+/* Weather Information */
+.app p {
+  color: white;
+  font-size: 16px;
+  margin: 14px 0;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
 }
 
-.error {
-  color: red;
-  margin-top: 12px;
-}
+/* Responsive */
+@media (max-width: 480px) {
+  .container {
+    padding: 22px;
+  }
 
-@media (max-width: 400px) {
-  .app {
-    width: 90%;
-    margin: 60px auto;
+  h1 {
+    font-size: 25px;
   }
 }
