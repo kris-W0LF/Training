@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState<string>("");
 
   function handleClick(value: string) {
     setInput((prev) => prev + value);
@@ -14,129 +13,197 @@ function App() {
   }
 
   function deleteLast() {
-    setInput(input.slice(0, -1));
-  }
-
-
-  
-function calculate() {
-  try {
-    let expression = input;
-
-   
-    while (expression.includes("(")) {
-      const start = expression.lastIndexOf("(");
-      const end = expression.indexOf(")", start);
-
-      if (end === -1) {
-        throw new Error("Invalid brackets");
-      }
-
-      const inside = expression.slice(start + 1, end);
-
-      const value = calculateSimple(inside);
-
-      expression =
-        expression.slice(0, start) +
-        value +
-        expression.slice(end + 1);
-    }
-
-    if (expression.includes(")")) {
-      throw new Error("Invalid brackets");
-    }
-
-   
-    const result = calculateSimple(expression);
-
-    setInput(String(Number(result.toFixed(10))));
-  } catch {
-    setInput("Error");
-  }
-}
-
-
-function calculateSimple(input: string): number {
-  let numbers: number[] = [];
-  let operators: string[] = [];
-  let number = "";
-
-  
-  for (let i = 0; i < input.length; i++) {
-    const char = input[i];
-
-    if (
-      (char >= "0" && char <= "9") ||
-      char === "."
-    ) {
-      number += char;
-    } else {
-      if (number !== "" && number !== "-") {
-        numbers.push(Number(number));
-        number = "";
-      }
-
-      if (
-        char === "-" &&
-        (i === 0 ||
-          ["+", "-", "*", "/", "("].includes(input[i - 1]))
-      ) {
-        number = "-";
-      } else {
-        operators.push(char);
-      }
-    }
-  }
-
-  if (number !== "" && number !== "-") {
-    numbers.push(Number(number));
-  }
-
-  if (numbers.length !== operators.length + 1) {
-    throw new Error("Invalid expression");
+    setInput((prev) => prev.slice(0, -1));
   }
 
  
-  for (let i = 0; i < operators.length; i++) {
-    if (
-      operators[i] === "*" ||
-      operators[i] === "/"
-    ) {
-      const left = numbers[i];
-      const right = numbers[i + 1];
+  function precedence(operator: string): number {
+    if (operator === "*" || operator === "/") {
+      return 2;
+    }
 
-      if (operators[i] === "/" && right === 0) {
+    return 1;
+  }
+
+  function applyOperation(
+    numbers: number[],
+    operators: string[]
+  ) {
+    const operator = operators.pop();
+    const right = numbers.pop();
+    const left = numbers.pop();
+
+    if (
+      operator === undefined ||
+      right === undefined ||
+      left === undefined
+    ) {
+      throw new Error("Invalid expression");
+    }
+
+    let result = 0;
+
+    if (operator === "+") {
+      result = left + right;
+    } else if (operator === "-") {
+      result = left - right;
+    } else if (operator === "*") {
+      result = left * right;
+    } else if (operator === "/") {
+      if (right === 0) {
         throw new Error("Cannot divide by zero");
       }
 
-      const result =
-        operators[i] === "*"
-          ? left * right
-          : left / right;
-
-      numbers.splice(i, 2, result);
-      operators.splice(i, 1);
-      i--;
+      result = left / right;
     }
+
+    numbers.push(result);
   }
 
  
-  let result = numbers[0];
+  function calculateExpression(expression: string): number {
+    const numbers: number[] = [];
+    const operators: string[] = [];
 
-  for (let i = 0; i < operators.length; i++) {
-    if (operators[i] === "+") {
-      result += numbers[i + 1];
-    } else if (operators[i] === "-") {
-      result -= numbers[i + 1];
+    let number = "";
+
+    for (let i = 0; i < expression.length; i++) {
+      const char = expression[i];
+
+      if (char === "(") {
+        if (number !== "") {
+          numbers.push(Number(number));
+          number = "";
+        }
+
+        if (
+          i > 0 &&
+          (expression[i - 1] === ")" ||
+            (i > 0 && /[0-9.]/.test(expression[i - 1])))
+        ) {
+          while (
+            operators.length > 0 &&
+            operators[operators.length - 1] !== "(" &&
+            precedence(operators[operators.length - 1]) >= 2
+          ) {
+            applyOperation(numbers, operators);
+          }
+
+          operators.push("*");
+        }
+
+        operators.push("(");
+      }
+
+    
+      else if (
+        (char >= "0" && char <= "9") ||
+        char === "."
+      ) {
+        number += char;
+      }
+
+     
+      else if (char === ")") {
+        if (number !== "") {
+          numbers.push(Number(number));
+          number = "";
+        }
+
+        if (!operators.includes("(")) {
+          throw new Error("Invalid brackets");
+        }
+
+        while (
+          operators.length > 0 &&
+          operators[operators.length - 1] !== "("
+        ) {
+          applyOperation(numbers, operators);
+        }
+
+        operators.pop();
+
+        
+        if (
+          i + 1 < expression.length &&
+          /[0-9.]/.test(expression[i + 1])
+        ) {
+          operators.push("*");
+        }
+      }
+
+     
+      else if (["+", "-", "*", "/"].includes(char)) {
+        // Negative number
+        if (
+          char === "-" &&
+          (i === 0 ||
+            ["+", "-", "*", "/", "("].includes(expression[i - 1]))
+        ) {
+          if (number !== "") {
+            throw new Error("Invalid expression");
+          }
+
+          number = "-";
+          continue;
+        }
+
+        if (number !== "") {
+          numbers.push(Number(number));
+          number = "";
+        }
+
+        while (
+          operators.length > 0 &&
+          operators[operators.length - 1] !== "(" &&
+          precedence(operators[operators.length - 1]) >=
+            precedence(char)
+        ) {
+          applyOperation(numbers, operators);
+        }
+
+        operators.push(char);
+      } else {
+        throw new Error("Invalid character");
+      }
+    }
+
+    if (number !== "" && number !== "-") {
+      numbers.push(Number(number));
+    }
+
+    while (operators.length > 0) {
+      if (operators[operators.length - 1] === "(") {
+        throw new Error("Invalid brackets");
+      }
+
+      applyOperation(numbers, operators);
+    }
+
+    if (
+      numbers.length !== 1 ||
+      !Number.isFinite(numbers[0])
+    ) {
+      throw new Error("Invalid expression");
+    }
+
+    return numbers[0];
+  }
+
+ 
+  function calculate() {
+    try {
+      if (input.trim() === "") {
+        return;
+      }
+
+      const result = calculateExpression(input);
+
+      setInput(String(Number(result.toFixed(10))));
+    } catch {
+      setInput("Error");
     }
   }
-
-  if (!Number.isFinite(result)) {
-    throw new Error("Invalid expression");
-  }
-
-  return result;
-}
 
   return (
     <div className="calculator">
@@ -147,6 +214,7 @@ function calculateSimple(input: string): number {
         value={input}
         className="display"
         readOnly
+        placeholder="0"
       />
 
       <div className="buttons">
@@ -180,3 +248,4 @@ function calculateSimple(input: string): number {
 }
 
 export default App;
+
